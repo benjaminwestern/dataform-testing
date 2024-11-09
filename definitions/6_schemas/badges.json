@@ -1,0 +1,44 @@
+[
+    {
+        "name": "id",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "name",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "date",
+        "mode": "NULLABLE",
+        "type": "TIMESTAMP",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "user_id",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "class",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "tag_based",
+        "mode": "NULLABLE",
+        "type": "BOOLEAN",
+        "description": "",
+        "fields": []
+    }
+]

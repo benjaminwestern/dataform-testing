@@ -1,0 +1,46 @@
+config {
+  type: "view",
+  schema: "sources",
+  name: "subscription",
+  description: "Tests various subscription status validation scenarios"
+}
+
+WITH StatusInputs AS (
+  SELECT '1' as input_string, 'test_case_subscribed_number' as test_case UNION ALL
+  SELECT 'Y', 'test_case_subscribed_short' UNION ALL
+  SELECT 'YES', 'test_case_subscribed_word' UNION ALL
+  SELECT 'TRUE', 'test_case_subscribed_boolean' UNION ALL
+  SELECT 'SUBSCRIBED', 'test_case_subscribed_full' UNION ALL
+  SELECT 'ACTIVE', 'test_case_subscribed_state' UNION ALL
+  SELECT 'OPT-IN', 'test_case_subscribed_hyphen' UNION ALL
+  SELECT '0', 'test_case_unsubscribed_number' UNION ALL
+  SELECT 'N', 'test_case_unsubscribed_short' UNION ALL
+  SELECT 'NO', 'test_case_unsubscribed_word' UNION ALL
+  SELECT 'FALSE', 'test_case_unsubscribed_boolean' UNION ALL
+  SELECT 'UNSUBSCRIBED', 'test_case_unsubscribed_full' UNION ALL
+  SELECT 'INACTIVE', 'test_case_unsubscribed_state' UNION ALL
+  SELECT 'OPT-OUT', 'test_case_unsubscribed_hyphen' UNION ALL
+  SELECT '2', 'test_case_pending_number' UNION ALL
+  SELECT 'PENDING', 'test_case_pending_word' UNION ALL
+  SELECT 'DOUBLE', 'test_case_pending_verification' UNION ALL
+  SELECT 'VERIFY', 'test_case_pending_action' UNION ALL
+  SELECT NULL, 'test_case_null' UNION ALL
+  SELECT '', 'test_case_empty' UNION ALL
+  SELECT ' YES ', 'test_case_with_spaces' UNION ALL
+  SELECT 'yes', 'test_case_lowercase' UNION ALL
+  SELECT 'MAYBE', 'test_case_unrecognized' UNION ALL
+  SELECT '?', 'test_case_invalid_char'
+),
+ValidatedStatuses AS (
+  SELECT 
+    input_string,
+    test_case,
+    ${attributes.standardiseSubscriptionStatus('input_string')} AS status_validation
+  FROM StatusInputs
+)
+SELECT
+  input_string,
+  test_case,
+  status_validation.value as default_validation,
+  status_validation.validation_status as default_validation_status
+FROM ValidatedStatuses

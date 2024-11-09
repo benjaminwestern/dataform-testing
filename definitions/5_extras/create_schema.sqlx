@@ -1,0 +1,14 @@
+config {
+    type: "operations",
+    dataset: "extras",
+    hasOutput: false
+}
+
+CREATE SCHEMA IF NOT EXISTS `test_dataset`
+OPTIONS (
+    description = 'Dataset used to for testing and learning purposes',
+    labels = [('environment','prod')],
+    location = 'US',
+    max_time_travel_hours = 168,
+    storage_billing_model = 'LOGICAL'
+)

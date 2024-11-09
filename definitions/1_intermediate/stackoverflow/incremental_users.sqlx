@@ -1,0 +1,44 @@
+config {
+  type: "incremental",
+  uniqueKey: ["user_id", "creation_date"],
+  dataset: "intermediate",
+  name: "incremental_users",
+  description: "Cleaned version of stackoverflow.users table",
+  dependencies: [{
+    dataset: "intermediate",
+    name: "users"
+  }],
+  bigquery: {
+    partitionBy: "DATE(creation_date)",
+    clusterBy: ["user_id"]
+  }
+  // Information:
+  // The pre_operations and post_operations blocks are optional and can be used to run SQL commands before and after the main SQL block
+  // the pre_operations block is executed before the main SQL block and in this case, it deletes all rows from the table if it's incremental
+  // the post_operations block is executed after the main SQL block and in this case, it deletes all users with user_id greater than 120000 just for the sake of the example
+}
+
+
+pre_operations {
+    ${when(incremental(), 
+    `DELETE 
+    FROM ${self()} 
+    WHERE 1=1`)}
+    }
+
+
+post_operations {
+    DELETE 
+    FROM ${self()} 
+    WHERE user_id > 120000
+}
+
+
+SELECT
+    user_id,
+    age,
+    creation_date,
+    user_tenure
+FROM
+    ${ref({schema: "intermediate", name: "users"})}
+    ${ when(incremental(), `WHERE creation_date > (SELECT max(creation_date) FROM ${self()})`) }

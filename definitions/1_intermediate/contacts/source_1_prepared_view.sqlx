@@ -1,0 +1,30 @@
+config {
+    type: "view",
+    schema: "intermediate",
+    name: "source_1_prepared",
+    description: "Highest priority source - Direct user input data",
+    dependencies: [
+        {dataset: "sources", name: "source_1"}
+    ]
+}
+
+js {
+    const tableRef = ref({schema: "sources", name: "source_1"});
+}
+
+${common.prepareSource({
+    table: tableRef,
+    name: common.generateTableName(tableRef),
+    priority: 1,
+    // Key is the output column name, value is the input column name
+    columnMapping: {
+        id: "user_id",
+        email: "email",
+        mobile: "mobile",
+        created_date: "created_date",
+        updated_date: "updated_date",
+        first_name: "first_name",
+        last_name: "last_name",
+        birth_date: "birth_date",
+    },
+})}

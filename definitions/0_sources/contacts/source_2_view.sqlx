@@ -1,0 +1,179 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "source_2",
+    description: "Secondary priority source - CRM system data"
+}
+
+WITH source_2_data AS (
+    -- Matching record with slightly different data
+    SELECT 
+        'C001' as crm_id,
+        'john.smith@email.com' as email,
+        '0400123456' as mobile,
+        'Jonathan' as first_name,  -- Different from source_1
+        'Smith' as last_name,
+        DATE '1990-01-01' as birth_date,
+        'Australia' as country,    -- Different format from source_1
+        'en-AU' as preferred_language, -- Different format
+        TRUE as marketing_consent,
+        'PREMIUM' as subscription_tier, -- Different case
+        'Active' as account_status,     -- Unique to CRM
+        100 as lifetime_value,          -- Unique to CRM
+        TIMESTAMP '2024-01-15' as created_date,
+        TIMESTAMP '2024-02-15' as updated_date
+    UNION ALL
+    -- Record with mobile where source_1 had none
+    SELECT 
+        'C002',
+        'sarah.jones@email.com',
+        '0400999888',  -- Has mobile where source_1 doesn't
+        'Sara',        -- Slightly different name
+        'Jones',
+        DATE '1992-05-15', -- Has birth date where source_1 doesn't
+        'Australia',
+        'en-AU',
+        FALSE,        -- Different from source_1
+        'BASIC',
+        'Active',
+        50,
+        TIMESTAMP '2023-12-01',
+        TIMESTAMP '2024-01-15'
+    UNION ALL
+    -- Complete record where source_1 had minimal
+    SELECT 
+        'C003',
+        'mike.brown@email.com',
+        '0400777666',  -- Has mobile where source_1 doesn't
+        'Michael',     -- Full name vs Mike
+        'Brown',
+        DATE '1985-09-20',
+        'New Zealand',
+        'en-NZ',
+        TRUE,
+        'BASIC',
+        'Active',
+        75,
+        TIMESTAMP '2023-11-01',
+        TIMESTAMP '2024-02-01'
+    UNION ALL
+    -- Older record for same person
+    SELECT 
+        'C004',
+        'emma.wilson@email.com',
+        '0400123459',
+        'Emma',
+        'Wilson',
+        DATE '1988-06-15',
+        'New Zealand',
+        'en-NZ',
+        TRUE,          -- Different from source_1
+        'BASIC',       -- Different from source_1
+        'Active',
+        200,
+        TIMESTAMP '2023-06-01',
+        TIMESTAMP '2024-01-01'
+    UNION ALL
+    -- Different email for same person
+    SELECT 
+        'C005',
+        'd.lee@email.com',        -- Different email format
+        '0400123460',             -- Same mobile as source_1
+        'David',
+        'Lee',
+        DATE '1991-04-10',        -- Has birth date where source_1 doesn't
+        'Australia',
+        'en-AU',
+        TRUE,
+        'PREMIUM',
+        'Active',
+        150,
+        TIMESTAMP '2023-09-01',
+        TIMESTAMP '2024-02-01'
+    UNION ALL
+    -- Older record with different subscription
+    SELECT 
+        'C006',
+        'peter.brown@email.com',
+        '0400123461',
+        'Peter',
+        'Brown',
+        DATE '1995-03-20',
+        'Australia',
+        'en-AU',
+        TRUE,
+        'BASIC',        -- Different from source_1
+        'Active',
+        300,
+        TIMESTAMP '2023-08-15',
+        TIMESTAMP '2024-01-15'
+    UNION ALL
+    -- More complete record for minimal source_1 record
+    SELECT 
+        'C007',
+        'jane.doe@email.com',
+        '0400444333',  -- Has mobile where source_1 doesn't
+        'Jane',
+        'Doe',
+        DATE '1993-12-25',
+        'Australia',
+        'en-AU',
+        FALSE,
+        'BASIC',
+        'Inactive',
+        0,
+        TIMESTAMP '2023-07-01',
+        TIMESTAMP '2024-01-20'
+    UNION ALL
+    -- Record with different name format
+    SELECT 
+        'C008',
+        'robert.smith@email.com',
+        '0400123463',
+        'Rob',         -- Different from source_1
+        'Smith',
+        DATE '1989-02-28',
+        'Australia',
+        'en-AU',
+        TRUE,
+        'PREMIUM',
+        'Active',
+        500,
+        TIMESTAMP '2023-10-01',
+        TIMESTAMP '2024-02-10'
+    UNION ALL
+    -- Additional email for existing customer
+    SELECT 
+        'C009',
+        'l.wang@email.com',      -- Alternative email
+        '0400123464',            -- Same mobile as source_1
+        'Lisa',
+        'Wang',
+        DATE '1992-08-12',
+        'Australia',
+        'zh-CN',                 -- Different language format
+        TRUE,
+        'BASIC',
+        'Active',
+        125,
+        TIMESTAMP '2023-11-15',
+        TIMESTAMP '2024-01-20'
+    UNION ALL
+    -- Historical record with old contact details
+    SELECT 
+        'C010',
+        'wilson.j@email.com',    -- Different email format
+        '0400123465',
+        'James',
+        'Wilson',
+        DATE '1987-11-30',
+        'Australia',
+        'en-AU',
+        TRUE,
+        'BASIC',      -- Different from source_1
+        'Active',
+        450,
+        TIMESTAMP '2023-05-01',
+        TIMESTAMP '2023-12-15'
+)
+SELECT * FROM source_2_data

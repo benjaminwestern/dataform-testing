@@ -1,0 +1,58 @@
+config {
+    type: "test",
+    dataset: {name: "mobile", schema: "sources"}
+}
+
+SELECT 'abc0412345678' as input_mobile, 'test_case_letters' as test_case,
+    NULL as default_validation, 'CONTAINS_LETTERS' as default_validation_status UNION ALL
+
+SELECT NULL as input_mobile, 'test_case_null' as test_case,
+    NULL as default_validation, 'MISSING' as default_validation_status UNION ALL
+
+SELECT '' as input_mobile, 'test_case_empty' as test_case,
+    NULL as default_validation, 'EMPTY' as default_validation_status UNION ALL
+
+SELECT '0412345678' as input_mobile, 'test_case_valid_basic' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '+61412345678' as input_mobile, 'test_case_valid_intl' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '61412345678' as input_mobile, 'test_case_valid_61' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '041234567' as input_mobile, 'test_case_short' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status UNION ALL
+
+SELECT '04123456789' as input_mobile, 'test_case_long' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status UNION ALL
+
+SELECT '+6141234567' as input_mobile, 'test_case_invalid_intl' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status UNION ALL
+
+SELECT '0312345678' as input_mobile, 'test_case_wrong_prefix_03' as test_case,
+    NULL as default_validation, 'WRONG_PREFIX' as default_validation_status UNION ALL
+
+SELECT '+62412345678' as input_mobile, 'test_case_wrong_prefix_62' as test_case,
+    NULL as default_validation, 'WRONG_PREFIX' as default_validation_status UNION ALL
+
+SELECT '041234567A' as input_mobile, 'test_case_letters_mixed' as test_case,
+    NULL as default_validation, 'CONTAINS_LETTERS' as default_validation_status UNION ALL
+
+SELECT ' 0412345678' as input_mobile, 'test_case_leading_space' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '412345678' as input_mobile, 'test_case_no_prefix' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '+61 412 345 678' as input_mobile, 'test_case_intl_spaces' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '+61-412-345-678' as input_mobile, 'test_case_intl_hyphens' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '0412-345-678' as input_mobile, 'test_case_local_hyphens' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status UNION ALL
+
+SELECT '0412345-678' as input_mobile, 'test_case_partial_hyphen' as test_case,
+    '+61412345678' as default_validation, 'VALID' as default_validation_status

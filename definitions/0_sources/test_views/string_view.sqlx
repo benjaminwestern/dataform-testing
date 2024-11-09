@@ -1,0 +1,103 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "string",
+    description: "Tests various string validation scenarios"
+}
+
+WITH StringInputs AS (
+  -- Default/Basic cases
+  SELECT 'basic_empty' as test_case, '' as input_string UNION ALL
+  SELECT 'basic_null', NULL UNION ALL
+  SELECT 'basic_simple', 'hello' UNION ALL
+  SELECT 'basic_mixed_case', 'World' UNION ALL
+  SELECT 'basic_upper', 'HELLO' UNION ALL
+  
+  -- Space validation cases
+  SELECT 'space_single', 'HEL LO' UNION ALL
+  SELECT 'space_multiple', 'HEL    LO' UNION ALL
+  SELECT 'space_leading', '   Hello' UNION ALL
+  SELECT 'space_trailing', 'Hello   ' UNION ALL
+  SELECT 'space_mixed', '  Hello   World  ' UNION ALL
+  
+  -- Character type cases
+  SELECT 'chars_numbers', 'HELLo1234' UNION ALL
+  SELECT 'chars_special', '@testing@' UNION ALL
+  SELECT 'chars_mixed', 'Test123!@#' UNION ALL
+  SELECT 'chars_only_numbers', '12345' UNION ALL
+  SELECT 'chars_only_special', '@#$%^' UNION ALL
+  
+  -- Length cases
+  SELECT 'length_long', REPEAT('a', 150) UNION ALL
+  SELECT 'length_exact', REPEAT('a', 100) UNION ALL
+  SELECT 'length_border', REPEAT('a', 99) UNION ALL
+  
+  -- Complex mixed cases
+  SELECT 'mixed_spaces_special', '  Hello@   World!  ' UNION ALL
+  SELECT 'mixed_all', '  12 Hello!!   WORLD 34  ' UNION ALL
+  SELECT 'mixed_proper_case', 'john smith' UNION ALL
+  SELECT 'mixed_proper_case_complex', 'JOHN von der SMITH'
+),
+GeneratedStrings AS (
+  SELECT 
+    input_string,
+    test_case,
+  -- Test 1: Default settings
+    ${common.validateString('input_string')} as default_validation,
+  -- Test 2: Strict validation (all checks enabled)
+    ${common.validateString('input_string', {
+      validateEmpty: true,
+      validateLength: true,
+      maxLength: 100,
+      allowNumbers: false,
+      allowSpecialChars: false,
+      allowMultipleSpaces: false,
+      trimSpaces: true,
+      properCase: true
+    })} as strict_validation,
+  -- Test 3: Name validation
+    ${common.validateString('input_string', {
+      validateEmpty: true,
+      allowNumbers: false,
+      allowSpecialChars: false,
+      trimSpaces: true,
+      properCase: true
+    })} as name_validation,
+  -- Test 4: Code validation (alphanumeric only)
+    ${common.validateString('input_string', {
+      validateEmpty: true,
+      validateLength: true,
+      maxLength: 50,
+      allowSpecialChars: false,
+      trimSpaces: true
+    })} as code_validation,
+  -- Test 5: Description validation (lenient)
+    ${common.validateString('input_string', {
+      validateEmpty: true,
+      validateLength: true,
+      maxLength: 150,
+      trimSpaces: true
+    })} as description_validation,
+  -- Test 6: Just cleaning (no validation status)
+    ${common.validateString('input_string', {
+      trimSpaces: true,
+      properCase: true,
+      returnValidationStatus: false
+    })} as cleaned_value
+  FROM StringInputs
+)
+SELECT
+  input_string,
+  test_case,
+  default_validation.value as default_validation,
+  default_validation.validation_status as default_validation_status,
+  strict_validation.value as strict_validation,
+  strict_validation.validation_status as strict_validation_status,
+  name_validation.value as name_validation,
+  name_validation.validation_status as name_validation_status,
+  code_validation.value as code_validation,
+  code_validation.validation_status as code_validation_status,
+  description_validation.value as description_validation,
+  description_validation.validation_status as description_validation_status,
+  cleaned_value
+FROM GeneratedStrings

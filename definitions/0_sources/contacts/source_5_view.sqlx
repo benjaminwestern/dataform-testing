@@ -1,0 +1,259 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "source_5",
+    description: "Customer service platform with support history and interaction preferences"
+}
+
+WITH source_5_data AS (
+    -- Customer with extensive support history
+    SELECT 
+        'S001' as support_id,
+        'john.smith@email.com' as email,
+        '0400123456' as mobile,
+        'John' as first_name,
+        'Smith' as last_name,
+        'Technical' as primary_support_category,
+        'Chat' as preferred_contact_method,
+        'Evening' as contact_time_preference,
+        'Premium' as support_tier,
+        10 as total_tickets,
+        3 as open_tickets,
+        95 as satisfaction_score,
+        ARRAY['billing', 'product', 'technical'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-01' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-01-15' as last_verification_date
+        ) as verification_info,
+        TIMESTAMP '2023-01-15' as created_date,
+        TIMESTAMP '2024-03-01' as updated_date
+    UNION ALL
+    -- Customer with minimal support interaction
+    SELECT 
+        'S002',
+        'sarah.jones@email.com',
+        '0400999888',
+        'Sarah',
+        'Jones',
+        'Billing' as primary_support_category,
+        'Email' as preferred_contact_method,
+        'Morning' as contact_time_preference,
+        'Standard' as support_tier,
+        2 as total_tickets,
+        0 as open_tickets,
+        85 as satisfaction_score,
+        ARRAY['billing'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-01-15' as last_interaction_date,
+        STRUCT(
+            FALSE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-08-01' as last_verification_date
+        ),
+        TIMESTAMP '2023-08-01',
+        TIMESTAMP '2024-01-15'
+    UNION ALL
+    -- Customer with high ticket volume
+    SELECT 
+        'S003',
+        'mike.brown@email.com',
+        '0400777666',
+        'Michael',
+        'Brown',
+        'Product' as primary_support_category,
+        'Phone' as preferred_contact_method,
+        'Afternoon' as contact_time_preference,
+        'Premium' as support_tier,
+        25 as total_tickets,
+        5 as open_tickets,
+        75 as satisfaction_score,
+        ARRAY['product', 'technical', 'billing', 'account'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-10' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-07-01' as last_verification_date
+        ),
+        TIMESTAMP '2023-07-01',
+        TIMESTAMP '2024-03-10'
+    UNION ALL
+    -- Recent customer with urgent issues
+    SELECT 
+        'S004',
+        'emma.wilson@email.com',
+        '0400123459',
+        'Emma',
+        'Wilson',
+        'Account' as primary_support_category,
+        'Phone' as preferred_contact_method,
+        'Anytime' as contact_time_preference,
+        'Premium' as support_tier,
+        5 as total_tickets,
+        2 as open_tickets,
+        90 as satisfaction_score,
+        ARRAY['account', 'technical'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-15' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2024-01-01' as last_verification_date
+        ),
+        TIMESTAMP '2024-01-01',
+        TIMESTAMP '2024-03-15'
+    UNION ALL
+    -- Phone-only customer
+    SELECT 
+        'S005',
+        NULL,
+        '0400123460',
+        'David',
+        'Lee',
+        'Billing' as primary_support_category,
+        'Phone' as preferred_contact_method,
+        'Morning' as contact_time_preference,
+        'Standard' as support_tier,
+        3 as total_tickets,
+        1 as open_tickets,
+        80 as satisfaction_score,
+        ARRAY['billing', 'account'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-02-28' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            FALSE as email_verified,
+            DATE '2023-10-15' as last_verification_date
+        ),
+        TIMESTAMP '2023-10-15',
+        TIMESTAMP '2024-02-28'
+    UNION ALL
+    -- Inactive support customer
+    SELECT 
+        'S006',
+        'peter.brown@email.com',
+        '0400123461',
+        'Peter',
+        'Brown',
+        'Product' as primary_support_category,
+        'Email' as preferred_contact_method,
+        'Afternoon' as contact_time_preference,
+        'Standard' as support_tier,
+        1 as total_tickets,
+        0 as open_tickets,
+        NULL as satisfaction_score,
+        ARRAY['product'] as interaction_categories,
+        FALSE as active_support_subscription,
+        DATE '2023-08-15' as last_interaction_date,
+        STRUCT(
+            FALSE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-08-15' as last_verification_date
+        ),
+        TIMESTAMP '2023-08-15',
+        TIMESTAMP '2023-08-15'
+    UNION ALL
+    -- Customer with verification issues
+    SELECT 
+        'S007',
+        'jane.doe@email.com',
+        '0400444333',
+        'Jane',
+        'Doe',
+        'Account' as primary_support_category,
+        'Email' as preferred_contact_method,
+        'Morning' as contact_time_preference,
+        'Standard' as support_tier,
+        4 as total_tickets,
+        1 as open_tickets,
+        70 as satisfaction_score,
+        ARRAY['account', 'verification'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-02-15' as last_interaction_date,
+        STRUCT(
+            FALSE as phone_verified,
+            FALSE as email_verified,
+            CAST(NULL as DATE) as last_verification_date
+        ),
+        TIMESTAMP '2023-11-01',
+        TIMESTAMP '2024-02-15'
+    UNION ALL
+    -- Premium support customer
+    SELECT 
+        'S008',
+        'robert.smith@email.com',
+        '0400123463',
+        'Robert',
+        'Smith',
+        'Technical' as primary_support_category,
+        'Chat' as preferred_contact_method,
+        'Evening' as contact_time_preference,
+        'Premium' as support_tier,
+        15 as total_tickets,
+        0 as open_tickets,
+        98 as satisfaction_score,
+        ARRAY['technical', 'product', 'billing'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-10' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-12-01' as last_verification_date
+        ),
+        TIMESTAMP '2023-12-01',
+        TIMESTAMP '2024-03-10'
+    UNION ALL
+    -- International customer support
+    SELECT 
+        'S009',
+        'lisa.wang@email.com',
+        '0400123464',
+        'Lisa',
+        'Wang',
+        'Product' as primary_support_category,
+        'Email' as preferred_contact_method,
+        'Evening' as contact_time_preference,
+        'Premium' as support_tier,
+        8 as total_tickets,
+        1 as open_tickets,
+        92 as satisfaction_score,
+        ARRAY['product', 'international'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-05' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2024-01-15' as last_verification_date
+        ),
+        TIMESTAMP '2024-01-15',
+        TIMESTAMP '2024-03-05'
+    UNION ALL
+    -- Recently escalated customer
+    SELECT 
+        'S010',
+        'james.wilson@email.com',
+        '0400123465',
+        'James',
+        'Wilson',
+        'Technical' as primary_support_category,
+        'Phone' as preferred_contact_method,
+        'Morning' as contact_time_preference,
+        'Premium' as support_tier,
+        12 as total_tickets,
+        3 as open_tickets,
+        65 as satisfaction_score,
+        ARRAY['technical', 'escalation'] as interaction_categories,
+        TRUE as active_support_subscription,
+        DATE '2024-03-12' as last_interaction_date,
+        STRUCT(
+            TRUE as phone_verified,
+            TRUE as email_verified,
+            DATE '2023-09-15' as last_verification_date
+        ),
+        TIMESTAMP '2023-09-15',
+        TIMESTAMP '2024-03-12'
+)
+SELECT * FROM source_5_data

@@ -1,0 +1,20 @@
+config {
+    type: "operations",
+    dataset: "sources",
+    name: "split_sample",
+    hasOutput: true
+}
+
+-- Be sure you have run `./scripts/seed_sample_data.sh` to create the sample data in the bucket
+-- Returns a single column of JSON strings from the NDJSON file
+-- You would use this method for dynamic NDJSON file schemas or to split the data into multiple tables
+CREATE OR REPLACE EXTERNAL TABLE ${self()} (
+    data STRING
+) OPTIONS (
+    format = 'CSV',
+    field_delimiter='\xFF', -- Define 'random' delimiter to split the data which by default splits newlines if not found in the data
+    uris = ["gs://${ dataform.projectConfig.vars.INPUT_BUCKET_2 }/sample_data.ndjson"],
+    description='Sample information (Code Bug List)',
+    max_bad_records = 0,
+    ignore_unknown_values = true
+)

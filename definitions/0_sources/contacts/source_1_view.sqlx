@@ -1,0 +1,159 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "source_1",
+    description: "Highest priority source - Direct user input data"
+}
+
+WITH source_1_data AS (
+    -- Standard complete record
+    SELECT 
+        'U001' as user_id,
+        'john.smith@email.com' as email,
+        '0400123456' as mobile,
+        'John' as first_name,
+        'Smith' as last_name,
+        DATE '1990-01-01' as birth_date,
+        'AU' as country,
+        'English' as language_preference,
+        TRUE as marketing_consent,
+        'Premium' as subscription_tier,
+        TIMESTAMP '2024-03-01' as created_date,
+        TIMESTAMP '2024-03-01' as updated_date
+    UNION ALL
+    -- Partial data with NULLs
+    SELECT 
+        'U002',
+        'sarah.jones@email.com',
+        NULL,  -- Missing mobile
+        'Sarah',
+        'Jones',
+        NULL,  -- Missing birth date
+        'AU',
+        'English',
+        TRUE,
+        'Basic',
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Email only record
+    SELECT 
+        'U003',
+        'mike.brown@email.com',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        TRUE,
+        NULL,
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Recently updated record
+    SELECT 
+        'U004',
+        'emma.wilson@email.com',
+        '0401123459',
+        'Emma',
+        'Wilson',
+        DATE '1988-06-15',
+        'NZ',
+        'English',
+        FALSE,
+        'Premium',
+        TIMESTAMP '2024-01-01',
+        TIMESTAMP '2024-03-15'  -- Recent update
+    UNION ALL
+    -- Mobile only record
+    SELECT 
+        'U005',
+        NULL,
+        '0400123460',
+        'David',
+        'Lee',
+        NULL,
+        'AU',
+        NULL,
+        TRUE,
+        NULL,
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Complete record with recent update
+    SELECT 
+        'U006',
+        'peter.brown@email.com',
+        '0400123461',
+        'Peter',
+        'Brown',
+        DATE '1995-03-20',
+        'AU',
+        'English',
+        TRUE,
+        'Premium',
+        TIMESTAMP '2024-01-01',
+        TIMESTAMP '2024-03-10'
+    UNION ALL
+    -- Minimal valid record
+    SELECT 
+        'U007',
+        'jane.doe@email.com',
+        NULL,
+        'Jane',
+        'Doe',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Record with all optional fields NULL
+    SELECT 
+        'U008',
+        'robert.smith@email.com',
+        '0400123463',
+        'Robert',
+        'Smith',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Complete record for multi-source matching
+    SELECT 
+        'U009',
+        'lisa.wang@email.com',
+        '0400123464',
+        'Lisa',
+        'Wang',
+        DATE '1992-08-12',
+        'AU',
+        'Chinese',
+        TRUE,
+        'Basic',
+        TIMESTAMP '2024-02-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Record with different email format for same person
+    SELECT 
+        'U010',
+        'james.wilson@email.com',
+        '0400123465',
+        'James',
+        'Wilson',
+        DATE '1987-11-30',
+        'NZ',
+        'English',
+        TRUE,
+        'Premium',
+        TIMESTAMP '2024-03-01',
+        TIMESTAMP '2024-03-01'
+)
+SELECT * FROM source_1_data

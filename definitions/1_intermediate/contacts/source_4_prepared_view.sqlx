@@ -1,0 +1,30 @@
+config {
+    type: "view",
+    schema: "intermediate",
+    name: "source_4_prepared",
+    description: "Transaction platform data with shipping addresses and purchase history",
+    dependencies: [
+        {dataset: "sources", name: "source_4"}
+    ]
+}
+
+js {
+    const tableRef = ref({schema: "sources", name: "source_4"});
+}
+
+${common.prepareSource({
+    table: tableRef,
+    name: common.generateTableName(tableRef),
+    priority: 4,
+    // Key is the output column name, value is the input column name
+    columnMapping: {
+        id: "transaction_id",
+        email: "email",
+        mobile: "mobile",
+        created_date: "created_date",
+        updated_date: "updated_date",
+        first_name: "first_name",
+        last_name: "last_name",
+        birth_date: `NULL`, // Missing in source 4
+    },
+})}

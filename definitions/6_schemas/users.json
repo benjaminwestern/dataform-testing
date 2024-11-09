@@ -1,0 +1,93 @@
+[
+    {
+        "name": "id",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "display_name",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "about_me",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "age",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "creation_date",
+        "mode": "NULLABLE",
+        "type": "TIMESTAMP",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "last_access_date",
+        "mode": "NULLABLE",
+        "type": "TIMESTAMP",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "location",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "reputation",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "up_votes",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "down_votes",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "views",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "profile_image_url",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    },
+    {
+        "name": "website_url",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "",
+        "fields": []
+    }
+]

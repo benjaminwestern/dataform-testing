@@ -1,0 +1,83 @@
+config {
+  type: "test",
+  dataset: {name: "gender", schema: "sources"}
+}
+
+SELECT 'M' as input_string, 'test_case_male_short' as test_case,
+  'MALE' as default_validation, 'VALID' as default_validation_status
+UNION ALL
+
+SELECT 'MALE', 'test_case_male_full',
+  'MALE', 'VALID'
+UNION ALL
+
+SELECT 'Man', 'test_case_male_mixed_case',
+  'MALE', 'VALID'
+UNION ALL
+
+SELECT 'BOY', 'test_case_male_alternate',
+  'MALE', 'VALID'
+UNION ALL
+
+SELECT 'F', 'test_case_female_short',
+  'FEMALE', 'VALID'
+UNION ALL
+
+SELECT 'FEMALE', 'test_case_female_full',
+  'FEMALE', 'VALID'
+UNION ALL
+
+SELECT 'Woman', 'test_case_female_mixed_case',
+  'FEMALE', 'VALID'
+UNION ALL
+
+SELECT 'GIRL', 'test_case_female_alternate',
+  'FEMALE', 'VALID'
+UNION ALL
+
+SELECT 'N', 'test_case_nonbinary_short',
+  'NON_BINARY', 'VALID'
+UNION ALL
+
+SELECT 'NON-BINARY', 'test_case_nonbinary_full',
+  'NON_BINARY', 'VALID'
+UNION ALL
+
+SELECT 'X', 'test_case_nonbinary_alternate',
+  'NON_BINARY', 'VALID'
+UNION ALL
+
+SELECT 'P', 'test_case_pnts_short',
+  'PREFER_NOT_TO_SAY', 'VALID'
+UNION ALL
+
+SELECT 'PNTS', 'test_case_pnts_full',
+  'PREFER_NOT_TO_SAY', 'VALID'
+UNION ALL
+
+SELECT 'NA', 'test_case_pnts_alternate',
+  'PREFER_NOT_TO_SAY', 'VALID'
+UNION ALL
+
+SELECT CAST(NULL AS STRING), 'test_case_null',
+  NULL, 'MISSING'
+UNION ALL
+
+SELECT '', 'test_case_empty',
+  NULL, 'EMPTY'
+UNION ALL
+
+SELECT ' M ', 'test_case_with_spaces',
+  'MALE', 'VALID'
+UNION ALL
+
+SELECT 'UNKNOWN', 'test_case_unrecognized',
+  NULL, 'UNRECOGNIZED_FORMAT'
+UNION ALL
+
+SELECT '?', 'test_case_invalid_char',
+  NULL, 'UNRECOGNIZED_FORMAT'
+UNION ALL
+
+SELECT 'male', 'test_case_lowercase',
+  'MALE', 'VALID'

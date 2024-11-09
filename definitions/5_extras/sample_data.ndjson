@@ -1,0 +1,30 @@
+{"BugID": "BUG-001", "Severity": "High", "Component": "Login Module", "Description": "User unable to login with valid credentials"}
+{"BugID": "BUG-002", "Severity": "Medium", "Component": "Search Feature", "Description": "Search results not displaying correctly for specific keywords"}
+{"BugID": "BUG-003", "Severity": "Low", "Component": "UI/UX", "Description": "Minor text alignment issue on the homepage"}
+{"BugID": "BUG-004", "Severity": "High", "Component": "Payment Gateway", "Description": "Transactions failing intermittently"}
+{"BugID": "BUG-005", "Severity": "Medium", "Component": "API Integration", "Description": "API calls returning incorrect data format"}
+{"BugID": "BUG-006", "Severity": "Low", "Component": "Documentation", "Description": "Typo in API documentation"}
+{"BugID": "BUG-007", "Severity": "High", "Component": "Database", "Description": "Database connection issues causing application downtime"}
+{"BugID": "BUG-008", "Severity": "Medium", "Component": "Reporting Module", "Description": "Reports generating incorrect data"}
+{"BugID": "BUG-009", "Severity": "Low", "Component": "Accessibility", "Description": "Contrast issues on certain buttons"}
+{"BugID": "BUG-010", "Severity": "High", "Component": "Security", "Description": "Potential SQL injection vulnerability"}
+{"BugID": "BUG-011", "Severity": "Medium", "Component": "Performance", "Description": "Slow loading time for certain pages"}
+{"BugID": "BUG-012", "Severity": "Low", "Component": "Localization", "Description": "Incorrect translation for some text"}
+{"BugID": "BUG-013", "Severity": "High", "Component": "Core Functionality", "Description": "Application crashing unexpectedly"}
+{"BugID": "BUG-014", "Severity": "Medium", "Component": "User Management", "Description": "Unable to delete user accounts"}
+{"BugID": "BUG-015", "Severity": "Low", "Component": "Styling", "Description": "Button color not consistent across the application"}
+{"BugID": "BUG-016", "Severity": "High", "Component": "Data Validation", "Description": "Application accepting invalid input"}
+{"BugID": "BUG-017", "Severity": "Medium", "Component": "Notification System", "Description": "Notifications not being sent correctly"}
+{"BugID": "BUG-018", "Severity": "Low", "Component": "Content Management", "Description": "Unable to upload images"}
+{"BugID": "BUG-019", "Severity": "High", "Component": "Authentication", "Description": "Two-factor authentication not working"}
+{"BugID": "BUG-020", "Severity": "Medium", "Component": "File Handling", "Description": "Unable to download large files"}
+{"BugID": "BUG-021", "Severity": "Low", "Component": "Form Submission", "Description": "Form not submitting correctly on certain browsers"}
+{"BugID": "BUG-022", "Severity": "High", "Component": "Session Management", "Description": "User session expiring unexpectedly"}
+{"BugID": "BUG-023", "Severity": "Medium", "Component": "Email Integration", "Description": "Emails not being sent"}
+{"BugID": "BUG-024", "Severity": "Low", "Component": "Mobile Responsiveness", "Description": "Layout issues on mobile devices"}
+{"BugID": "BUG-025", "Severity": "High", "Component": "Caching", "Description": "Caching not working correctly"}
+{"BugID": "BUG-026", "Severity": "Medium", "Component": "Third-Party Libraries", "Description": "Compatibility issues with a third-party library"}
+{"BugID": "BUG-027", "Severity": "Low", "Component": "Version Control", "Description": "Merge conflicts causing build errors"}
+{"BugID": "BUG-028", "Severity": "High", "Component": "Deployment", "Description": "Deployment process failing"}
+{"BugID": "BUG-029", "Severity": "Medium", "Component": "Testing", "Description": "Insufficient test coverage"}
+{"BugID": "BUG-030", "Severity": "Low", "Component": "Code Quality", "Description": "Code style violations"}

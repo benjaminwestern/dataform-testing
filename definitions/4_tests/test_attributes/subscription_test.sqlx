@@ -1,0 +1,99 @@
+config {
+  type: "test",
+  dataset: {name: "subscription", schema: "sources"}
+}
+
+SELECT '1' as input_string, 'test_case_subscribed_number' as test_case,
+  'SUBSCRIBED' as default_validation, 'VALID' as default_validation_status
+UNION ALL
+
+SELECT 'Y', 'test_case_subscribed_short',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'YES', 'test_case_subscribed_word',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'TRUE', 'test_case_subscribed_boolean',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'SUBSCRIBED', 'test_case_subscribed_full',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'ACTIVE', 'test_case_subscribed_state',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'OPT-IN', 'test_case_subscribed_hyphen',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT '0', 'test_case_unsubscribed_number',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'N', 'test_case_unsubscribed_short',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'NO', 'test_case_unsubscribed_word',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'FALSE', 'test_case_unsubscribed_boolean',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'UNSUBSCRIBED', 'test_case_unsubscribed_full',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'INACTIVE', 'test_case_unsubscribed_state',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'OPT-OUT', 'test_case_unsubscribed_hyphen',
+  'UNSUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT '2', 'test_case_pending_number',
+  'PENDING', 'VALID'
+UNION ALL
+
+SELECT 'PENDING', 'test_case_pending_word',
+  'PENDING', 'VALID'
+UNION ALL
+
+SELECT 'DOUBLE', 'test_case_pending_verification',
+  'PENDING', 'VALID'
+UNION ALL
+
+SELECT 'VERIFY', 'test_case_pending_action',
+  'PENDING', 'VALID'
+UNION ALL
+
+SELECT CAST(NULL AS STRING), 'test_case_null',
+  NULL, 'MISSING'
+UNION ALL
+
+SELECT '', 'test_case_empty',
+  NULL, 'EMPTY'
+UNION ALL
+
+SELECT ' YES ', 'test_case_with_spaces',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'yes', 'test_case_lowercase',
+  'SUBSCRIBED', 'VALID'
+UNION ALL
+
+SELECT 'MAYBE', 'test_case_unrecognized',
+  NULL, 'UNRECOGNIZED_STATUS'
+UNION ALL
+
+SELECT '?', 'test_case_invalid_char',
+  NULL, 'UNRECOGNIZED_STATUS'

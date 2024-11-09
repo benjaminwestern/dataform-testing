@@ -1,0 +1,26 @@
+config {
+    type: "test",
+    dataset: {name: "sha", schema: "sources"}
+}
+
+SELECT 'test@example.com' as input_email, '0412345678' as input_mobile, "do9STJjtquW2qHcDAaO1OUjYAq6z2mb5pDulo3LkIrw=" as sha_id
+UNION ALL
+SELECT 'TEST@EXAMPLE.COM' as input_email, '+61412345678' as input_mobile, "ClEyKghIGViTeRmvYff7tv3BiHupNGtn5W4BquWMohI=" as sha_id
+UNION ALL
+SELECT 'test.email@example.com' as input_email, '61412345678' as input_mobile, "eHsLIsjh6E1wlSwXAld0ZjB7r8deqWOjBw1EWOtOfFw=" as sha_id
+UNION ALL
+SELECT 'test@sub.example.com' as input_email, '041234567' as input_mobile, "FsM1p0LC8vUqaK3ZHkARFztrwn3H5/r6XznM/+qjOq8=" as sha_id
+UNION ALL
+SELECT 'test@example..com' as input_email, '04123456789' as input_mobile, "mDX1D79et1G/wkRs1doddbxN7pNuMiILM7Hqmv+Xdq0=" as sha_id
+UNION ALL
+SELECT 'test@invalid' as input_email, '+6141234567' as input_mobile, "K2lfyHcKDxMMDp8kQfNU72MPrry+ae5skrKGsE9Hmbs=" as sha_id
+UNION ALL
+SELECT 'invalid.email' as input_email, '+62412345678' as input_mobile, "7DxcXPjb8hcyQSbMGEOUCwDhECwoqhQAC6nmJXYGwRo=" as sha_id
+UNION ALL
+SELECT ' test@example.com ' as input_email, ' 0412345678' as input_mobile, "do9STJjtquW2qHcDAaO1OUjYAq6z2mb5pDulo3LkIrw=" as sha_id
+UNION ALL
+SELECT 'test+label@example.com' as input_email, NULL as input_mobile, "nbjBGT6Zxip15C2GTyZ73NMozv84ItEsVj9m80akfLs=" as sha_id
+UNION ALL
+SELECT CAST(NULL as STRING) as input_email, '+61 412 345 678' as input_mobile, "wFR0p5f+ezf12Ed59Yax6Rl/1gLDwdX49d6+oP7aA3Y=" as sha_id
+UNION ALL
+SELECT '' as input_email, '' as input_mobile, "y+XP33whGKnD147x1oTzr6CJIBNSiGRJoGplEc/vdKc=" as sha_id

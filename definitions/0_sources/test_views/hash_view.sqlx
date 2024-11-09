@@ -1,0 +1,28 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "hash",
+    description: "Tests various hash validation scenarios"
+}
+
+WITH EmailInputs AS (
+  SELECT 'test@example.com' as input_email UNION ALL
+  SELECT 'TEST@EXAMPLE.COM' UNION ALL
+  SELECT 'test.email@example.com' UNION ALL
+  SELECT 'test@sub.example.com' UNION ALL
+  SELECT 'test@example..com' UNION ALL
+  SELECT 'test@invalid' UNION ALL
+  SELECT 'invalid.email' UNION ALL
+  SELECT ' test@example.com ' UNION ALL
+  SELECT 'test+label@example.com' UNION ALL
+  SELECT NULL UNION ALL
+  SELECT ''
+),
+HashedEmails AS (
+  SELECT input_email, ${common.md5Hash('input_email')} AS hashed_email
+  FROM EmailInputs
+)
+SELECT
+    input_email,
+    hashed_email
+FROM HashedEmails

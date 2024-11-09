@@ -1,0 +1,72 @@
+config {
+  type: "view",
+  dataset: "outputs",
+  name: "user_stats",
+  tags: ["daily", "reporting"],
+  description: "Create a summary table for all users including statistics on questions, answers and badges received.",
+  dependencies: [{
+    dataset: "intermediate",
+    name: "users"
+  },
+  {
+    dataset: "intermediate",
+    name: "badges"
+  },
+  {
+    dataset: "outputs",
+    name: "all_posts"
+  }],
+  columns: {
+    hashed_user_id: `Hashed version of the user ID for external sharing`,
+    user_id: `A unique identifier for a user`,
+    age: `The raw age value of a user`,
+    age_bucket: `Standardized age information including validation and grouping`,
+    creation_date: `The date this user signed up`,
+    user_tenure: `The number of years since the user's creation date`,
+    badge_count: `The all-time number of badges the user has received`,
+    questions_and_answer_count: `The all-time number of questions and answers the user has created`,
+    question_count: `The all-time number of questions the user has created`,
+    answer_count: `The all-time number of answers the user has created`,
+    last_badge_received_at: `The time the user received their most recent badge`,
+    last_posted_at: `The time the user last posted a question or answer`,
+    last_question_posted_at: `The time the user last posted an answer`,
+    last_answer_posted_at: `The time the user last posted a question`,
+  },
+  assertions: {
+    uniqueKey: ["user_id"],
+    rowConditions: ["badge_count >= 0"]
+  }
+}
+
+WITH UserBaseData AS (
+  SELECT
+    ${common.md5Hash("users.user_id")} AS hashed_user_id,
+    users.user_id,
+    ${attributes.standardiseAge('NULL', "users.age", 'CURRENT_DATE')} AS age_bucket,
+    users.creation_date,
+    users.user_tenure
+  FROM ${ref({schema: "intermediate", name: "users"})} AS users
+)
+
+SELECT
+  UserBaseData.hashed_user_id,
+  UserBaseData.user_id,
+  UserBaseData.age_bucket.value.exact_age as age,
+  UserBaseData.age_bucket.value.age_group as age_bucket,
+  UserBaseData.age_bucket.validation_status as age_validation,
+  UserBaseData.creation_date,
+  UserBaseData.user_tenure,
+  COUNT(DISTINCT badges.badge_id) AS badge_count,
+  COUNT(DISTINCT all_posts.post_id) AS questions_and_answer_count,
+  COUNT(DISTINCT IF(type = "question", all_posts.post_id, NULL)) AS question_count,
+  COUNT(DISTINCT IF(type = "answer", all_posts.post_id, NULL)) AS answer_count,
+  MAX(badges.award_timestamp) AS last_badge_received_at,
+  MAX(all_posts.created_at) AS last_posted_at,
+  MAX(IF(type = "question", all_posts.created_at, NULL)) AS last_question_posted_at,
+  MAX(IF(type = "answer", all_posts.created_at, NULL)) AS last_answer_posted_at
+FROM UserBaseData
+LEFT JOIN ${ref({schema: "intermediate", name: "badges"})} AS badges
+  ON UserBaseData.user_id = badges.user_id
+LEFT JOIN ${ref({schema: "outputs", name: "all_posts"})} AS all_posts
+  ON UserBaseData.user_id = all_posts.owner_user_id
+GROUP BY 1, 2, 3, 4, 5, 6, 7

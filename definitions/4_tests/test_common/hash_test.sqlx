@@ -1,0 +1,26 @@
+config {
+    type: "test",
+    dataset: {name: "hash", schema: "sources"}
+}
+
+SELECT 'test@example.com' as input_email, 'KHuk0Jg60lrz0JIk4g7lBQ==' as hashed_email
+UNION ALL
+SELECT 'TEST@EXAMPLE.COM' as input_email, 'KHuk0Jg60lrz0JIk4g7lBQ==' as hashed_email
+UNION ALL
+SELECT 'test.email@example.com' as input_email, '7ldxj3Fsk5ohNvkyHno4Ww==' as hashed_email
+UNION ALL
+SELECT 'test@sub.example.com' as input_email, 'wE/v/IstXKfyHa0j7snHsA==' as hashed_email
+UNION ALL
+SELECT 'test@example..com' as input_email, 'uXjNxCrnC7+lSzETKBqp4g==' as hashed_email
+UNION ALL
+SELECT 'test@invalid' as input_email, 'xR7Zn9QEYmEqsGcFzpvs7g==' as hashed_email
+UNION ALL
+SELECT 'invalid.email' as input_email, '+nPED+ogqWLhATDbBVgKCA==' as hashed_email
+UNION ALL
+SELECT ' test@example.com ' as input_email, 'KHuk0Jg60lrz0JIk4g7lBQ==' as hashed_email,
+UNION ALL
+SELECT 'test+label@example.com' as input_email, '5894w0+mS8214GMfoSUHUw==' as hashed_email
+UNION ALL
+SELECT CAST(NULL as STRING) as input_email, '6gFmKlvL6UoyNtVVu8s9ow==' as hashed_email
+UNION ALL
+SELECT '' as input_email, '6gFmKlvL6UoyNtVVu8s9ow==' as hashed_email

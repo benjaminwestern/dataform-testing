@@ -1,0 +1,84 @@
+config {
+    type: "test",
+    dataset: {name: "email", schema: "sources"}
+}
+
+SELECT 'test@example.com' as input_email, 'basic_valid' as test_case, 
+    'test@example.com' as default_validation, 'VALID' as default_validation_status, 
+    'example.com' as default_domain UNION ALL
+
+SELECT 'TEST@EXAMPLE.COM' as input_email, 'case_insensitive' as test_case,
+    'test@example.com' as default_validation, 'VALID' as default_validation_status,
+    'example.com' as default_domain UNION ALL
+
+SELECT 'test.email@example.com' as input_email, 'local_part_dot' as test_case,
+    'test.email@example.com' as default_validation, 'VALID' as default_validation_status,
+    'example.com' as default_domain UNION ALL
+
+SELECT 'test@sub.example.com' as input_email, 'subdomain' as test_case,
+    'test@sub.example.com' as default_validation, 'VALID' as default_validation_status,
+    'sub.example.com' as default_domain UNION ALL
+
+SELECT 'test@example..com' as input_email, 'invalid_double_dot' as test_case,
+    NULL as default_validation, 'INVALID_TLD' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test@invalid' as input_email, 'missing_tld' as test_case,
+    NULL as default_validation, 'INVALID_TLD' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'invalid.email' as input_email, 'missing_at' as test_case,
+    NULL as default_validation, 'NO_AT_SYMBOL' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT ' test@example.com ' as input_email, 'whitespace_trim' as test_case,
+    'test@example.com' as default_validation, 'VALID' as default_validation_status,
+    'example.com' as default_domain UNION ALL
+
+SELECT 'test+label@example.com' as input_email, 'plus_addressing' as test_case,
+    'test+label@example.com' as default_validation, 'VALID' as default_validation_status,
+    'example.com' as default_domain UNION ALL
+
+SELECT NULL as input_email, 'null_input' as test_case,
+    NULL as default_validation, 'MISSING' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT '' as input_email, 'empty_input' as test_case,
+    NULL as default_validation, 'EMPTY' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test@@example.com' as input_email, 'double_at' as test_case,
+    NULL as default_validation, 'NO_DOMAIN' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test@example.c' as input_email, 'short_tld' as test_case,
+    NULL as default_validation, 'INVALID_TLD' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test@.example.com' as input_email, 'leading_dot_domain' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test.@example.com' as input_email, 'trailing_dot_local' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'very.long.email.address.that.is.valid@really.long.domain.name.that.is.valid.example.com' as input_email, 'long_valid_address' as test_case,
+    'very.long.email.address.that.is.valid@really.long.domain.name.that.is.valid.example.com' as default_validation, 'VALID' as default_validation_status,
+    'really.long.domain.name.that.is.valid.example.com' as default_domain UNION ALL
+
+SELECT "!#$%&\'*+-/=?^_`{|}~@example.com" as input_email, 'special_chars_local' as test_case,
+    "!#$%&\'*+-/=?^_`{|}~@example.com" as default_validation, 'VALID' as default_validation_status,
+    'example.com' as default_domain UNION ALL
+
+SELECT 'test@example.com.' as input_email, 'trailing_dot_domain' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT '@example.com' as input_email, 'empty_local_part' as test_case,
+    NULL as default_validation, 'INVALID_FORMAT' as default_validation_status,
+    NULL as default_domain UNION ALL
+
+SELECT 'test@' as input_email, 'empty_domain' as test_case,
+    NULL as default_validation, 'NO_DOMAIN' as default_validation_status,
+    NULL as default_domain

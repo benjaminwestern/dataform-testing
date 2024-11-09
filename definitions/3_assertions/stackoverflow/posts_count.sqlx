@@ -1,0 +1,16 @@
+config {
+  type: "assertion"
+}
+
+With assertion as (
+  -- Check if the count of posts matches the sum of answers and questions
+  SELECT
+    (
+        ((select count(*) from ${ref({schema: "intermediate", name: "answers"})}) +
+        (select count(*) from ${ref({schema: "intermediate", name: "questions"})})
+    ) - (select count(*) from ${ref({schema: "outputs", name: "all_posts"})})) = 0 AS difference
+)
+
+SELECT 'Count of posts does not match sum of answers and questions.' as error
+FROM assertion
+WHERE NOT difference

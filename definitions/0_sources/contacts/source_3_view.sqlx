@@ -1,0 +1,207 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "source_3",
+    description: "Marketing platform data with communication preferences and campaign history"
+}
+
+WITH source_3_data AS (
+    -- Active subscriber with detailed preferences
+    SELECT 
+        'M001' as marketing_id,
+        'john.smith@email.com' as email,
+        '0400123456' as mobile,
+        'John' as first_name,
+        'Smith' as last_name,
+        TRUE as email_subscribed,
+        TRUE as sms_subscribed,
+        ARRAY['newsletters', 'promotions', 'product_updates'] as subscription_types,
+        'weekly' as email_frequency,
+        'monthly' as sms_frequency,
+        'high' as engagement_level,
+        10 as campaign_count,
+        DATE '2023-12-01' as last_engagement_date,
+        TIMESTAMP '2023-06-15' as created_date,
+        TIMESTAMP '2024-02-20' as updated_date
+    UNION ALL
+    -- Email only subscriber
+    SELECT 
+        'M002',
+        'sarah.jones@email.com',
+        NULL,
+        'Sarah',
+        'Jones',
+        TRUE,
+        FALSE,
+        ARRAY['newsletters'],
+        'monthly',
+        NULL,
+        'medium',
+        5,
+        DATE '2024-01-15',
+        TIMESTAMP '2023-08-01',
+        TIMESTAMP '2024-01-15'
+    UNION ALL
+    -- Unsubscribed from all communications
+    SELECT 
+        'M003',
+        'mike.brown@email.com',
+        '0400777666',
+        'Mike',
+        'Brown',
+        FALSE,
+        FALSE,
+        ARRAY[],
+        NULL,
+        NULL,
+        'none',
+        2,
+        DATE '2023-11-01',
+        TIMESTAMP '2023-07-01',
+        TIMESTAMP '2023-11-01'
+    UNION ALL
+    -- High engagement, all channels
+    SELECT 
+        'M004',
+        'emma.wilson@email.com',
+        '0400123459',
+        'Emma',
+        'Wilson',
+        TRUE,
+        TRUE,
+        ARRAY['newsletters', 'promotions', 'product_updates', 'events'],
+        'daily',
+        'weekly',
+        'very_high',
+        25,
+        DATE '2024-03-01',
+        TIMESTAMP '2023-09-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- SMS only subscriber
+    SELECT 
+        'M005',
+        NULL,
+        '0400123460',
+        'David',
+        'Lee',
+        FALSE,
+        TRUE,
+        ARRAY['promotions'],
+        NULL,
+        'weekly',
+        'low',
+        3,
+        DATE '2024-02-01',
+        TIMESTAMP '2023-10-15',
+        TIMESTAMP '2024-02-01'
+    UNION ALL
+    -- Recent subscriber
+    SELECT 
+        'M006',
+        'peter.brown@email.com',
+        '0400123461',
+        'Peter',
+        'Brown',
+        TRUE,
+        TRUE,
+        ARRAY['newsletters', 'promotions'],
+        'weekly',
+        'monthly',
+        'new',
+        1,
+        DATE '2024-03-01',
+        TIMESTAMP '2024-02-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Dormant subscriber
+    SELECT 
+        'M007',
+        'jane.doe@email.com',
+        '0400444333',
+        'Jane',
+        'Doe',
+        TRUE,
+        TRUE,
+        ARRAY['newsletters'],
+        'monthly',
+        'monthly',
+        'inactive',
+        0,
+        DATE '2023-06-01',
+        TIMESTAMP '2023-05-01',
+        TIMESTAMP '2023-06-01'
+    UNION ALL
+    -- Different email, same mobile as another record
+    SELECT 
+        'M008',
+        'rob.smith@email.com',
+        '0400123463',
+        'Robert',
+        'Smith',
+        TRUE,
+        FALSE,
+        ARRAY['newsletters', 'product_updates'],
+        'weekly',
+        NULL,
+        'medium',
+        8,
+        DATE '2024-02-15',
+        TIMESTAMP '2023-11-01',
+        TIMESTAMP '2024-02-15'
+    UNION ALL
+    -- Multiple subscriptions, different contact
+    SELECT 
+        'M009',
+        'lisa.wang@email.com',
+        '0400123464',
+        'Lisa',
+        'Wang',
+        TRUE,
+        TRUE,
+        ARRAY['newsletters', 'promotions', 'events'],
+        'weekly',
+        'monthly',
+        'high',
+        15,
+        DATE '2024-02-28',
+        TIMESTAMP '2023-12-01',
+        TIMESTAMP '2024-02-28'
+    UNION ALL
+    -- Recently updated preferences
+    SELECT 
+        'M010',
+        'wilson.j@email.com',
+        '0400123465',
+        'James',
+        'Wilson',
+        TRUE,
+        FALSE,
+        ARRAY['newsletters'],
+        'monthly',
+        NULL,
+        'low',
+        4,
+        DATE '2024-01-15',
+        TIMESTAMP '2023-08-15',
+        TIMESTAMP '2024-03-10'
+    UNION ALL
+    -- Additional test cases for edge scenarios
+    SELECT 
+        'M011',
+        'mark.taylor@email.com',
+        '0400123466',
+        'Mark',
+        'Taylor',
+        TRUE,
+        TRUE,
+        ARRAY['newsletters', 'promotions'],
+        'weekly',
+        'weekly',
+        'medium',
+        7,
+        DATE '2024-02-20',
+        TIMESTAMP '2023-09-15',
+        TIMESTAMP '2024-02-20'
+)
+SELECT * FROM source_3_data

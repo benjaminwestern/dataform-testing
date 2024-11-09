@@ -1,0 +1,29 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "sha",
+    description: "Tests various hash validation scenarios"
+}
+
+WITH ShaInputs AS (
+  SELECT 'test@example.com' as input_email, '0412345678' as input_mobile UNION ALL
+  SELECT 'TEST@EXAMPLE.COM', '+61412345678' UNION ALL
+  SELECT 'test.email@example.com', '61412345678' UNION ALL
+  SELECT 'test@sub.example.com', '041234567' UNION ALL
+  SELECT 'test@example..com', '04123456789' UNION ALL
+  SELECT 'test@invalid', '+6141234567' UNION ALL
+  SELECT 'invalid.email', '+62412345678' UNION ALL
+  SELECT ' test@example.com ', ' 0412345678' UNION ALL
+  SELECT 'test+label@example.com', NULL UNION ALL
+  SELECT NULL, '+61 412 345 678' UNION ALL
+  SELECT '', ''
+),
+GeneratedShas AS (
+  SELECT input_email, input_mobile, ${common.generateCompositeId(['input_email', 'input_mobile'])} AS sha_id
+  FROM ShaInputs
+)
+SELECT
+    input_email,
+    input_mobile,
+    sha_id
+FROM GeneratedShas

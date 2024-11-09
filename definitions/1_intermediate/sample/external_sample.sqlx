@@ -1,0 +1,19 @@
+config {
+    type: "view",
+    dataset: "intermediate",
+    name: "external_sample",
+    dependencies: [
+        {
+            dataset: "sources",
+            name: "external_sample"
+        }
+    ]
+}
+
+SELECT
+    BugID as bug_id,
+    Severity as severity,
+    Component as component,
+    Description as description
+FROM 
+    ${ref({schema: "sources", name: "external_sample"})}

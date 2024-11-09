@@ -1,0 +1,61 @@
+config {
+  type: "view",
+  schema: "sources",
+  name: "address",
+  description: "Tests various address validation scenarios"
+}
+
+WITH AddressInputs AS (
+  SELECT 
+    '123 Main St' as address1,
+    'Suite 100' as address2,
+    'Building A' as address3,
+    'Richmond' as suburb,
+    'Melbourne' as city,
+    '3121' as postcode,
+    'VIC' as state,
+    'AUSTRALIA' as country,
+    'test_case_complete_valid' as test_case
+  UNION ALL
+  SELECT '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', '3121', 'VIC', NULL, 'test_case_default_country'
+  UNION ALL
+  SELECT NULL, NULL, NULL, 'Richmond', 'Melbourne', '3121', 'VIC', 'AUSTRALIA', 'test_case_suburb_only'
+  UNION ALL
+  SELECT NULL, NULL, NULL, NULL, 'Melbourne', NULL, 'VIC', 'AUSTRALIA', 'test_case_city_only'
+  UNION ALL
+  SELECT NULL, NULL, NULL, NULL, NULL, NULL, 'VIC', 'AUSTRALIA', 'test_case_state_only'
+  UNION ALL
+  SELECT NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'USA', 'test_case_country_only'
+  UNION ALL
+  SELECT NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'test_case_all_null'
+  UNION ALL
+  SELECT '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', 'ABC', 'VIC', 'AUSTRALIA', 'test_case_invalid_postcode'
+  UNION ALL
+  SELECT '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', '3121', 'INVALID', 'AUSTRALIA', 'test_case_invalid_state'
+  UNION ALL
+  SELECT ' 123   Main   St ', NULL, NULL, ' Richmond ', ' Melbourne ', '3121', ' VIC ', ' AUSTRALIA ', 'test_case_extra_spaces'
+),
+ValidatedAddresses AS (
+  SELECT 
+    *,
+    ${attributes.standardiseAddress('address1', 'address2', 'address3', 'suburb', 'city', 'postcode', 'state', 'country')} AS address_validation
+  FROM AddressInputs
+)
+SELECT
+  address1,
+  address2,
+  address3,
+  suburb,
+  city,
+  postcode,
+  state,
+  country,
+  test_case,
+  address_validation.value.full_address,
+  address_validation.value.suburb_level,
+  address_validation.value.city_level,
+  address_validation.value.state_level,
+  address_validation.value.country_level,
+  address_validation.validation_status,
+  address_validation.location_accuracy
+FROM ValidatedAddresses

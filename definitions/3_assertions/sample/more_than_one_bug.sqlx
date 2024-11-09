@@ -1,0 +1,12 @@
+config {
+  type: "assertion"
+}
+
+-- Columns need to be named in views
+SELECT
+    count(*) as bug_count,
+    severity
+FROM 
+    ${ref({schema: "intermediate", name: "parsed_sample"})}
+GROUP BY severity
+HAVING count(*) = 0

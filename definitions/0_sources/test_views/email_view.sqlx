@@ -1,0 +1,59 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "email",
+    description: "Tests various email validation scenarios"
+}
+
+WITH EmailInputs AS (
+SELECT 'test@example.com' as input_email, 'basic_valid' as test_case 
+UNION ALL
+SELECT 'TEST@EXAMPLE.COM', 'case_insensitive'
+UNION ALL
+SELECT 'test.email@example.com', 'local_part_dot'
+UNION ALL
+SELECT 'test@sub.example.com', 'subdomain'
+UNION ALL
+SELECT 'test@example..com', 'invalid_double_dot'
+UNION ALL
+SELECT 'test@invalid', 'missing_tld'
+UNION ALL
+SELECT 'invalid.email', 'missing_at'
+UNION ALL
+SELECT ' test@example.com ', 'whitespace_trim'
+UNION ALL
+SELECT 'test+label@example.com', 'plus_addressing'
+UNION ALL
+SELECT NULL, 'null_input'
+UNION ALL
+SELECT '', 'empty_input'
+UNION ALL
+SELECT 'test@@example.com', 'double_at'
+UNION ALL
+SELECT 'test@example.c', 'short_tld'
+UNION ALL
+SELECT 'test@.example.com', 'leading_dot_domain'
+UNION ALL
+SELECT 'test.@example.com', 'trailing_dot_local'
+UNION ALL
+SELECT 'very.long.email.address.that.is.valid@really.long.domain.name.that.is.valid.example.com', 'long_valid_address'
+UNION ALL
+SELECT "!#$%&\'*+-/=?^_`{|}~@example.com", 'special_chars_local'
+UNION ALL
+SELECT 'test@example.com.', 'trailing_dot_domain'
+UNION ALL
+SELECT '@example.com', 'empty_local_part'
+UNION ALL
+SELECT 'test@', 'empty_domain'
+),
+ValidatedEmails AS (
+  SELECT input_email, test_case, ${attributes.validateEmail('input_email')} AS email_validation
+  FROM EmailInputs
+)
+SELECT
+    input_email,
+    test_case,
+    email_validation.value as default_validation,
+    email_validation.validation_status as default_validation_status,
+    email_validation.domain as default_domain
+FROM ValidatedEmails

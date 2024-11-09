@@ -1,0 +1,30 @@
+config {
+    type: "view",
+    schema: "intermediate",
+    name: "source_3_prepared",
+    description: "Marketing platform data with communication preferences and campaign history",
+    dependencies: [
+        {dataset: "sources", name: "source_3"}
+    ]
+}
+
+js {
+    const tableRef = ref({schema: "sources", name: "source_3"});
+}
+
+${common.prepareSource({
+    table: tableRef,
+    name: common.generateTableName(tableRef),
+    priority: 3,
+    // Key is the output column name, value is the input column name
+    columnMapping: {
+        id: "marketing_id",
+        email: "email",
+        mobile: "mobile",
+        created_date: "created_date",
+        updated_date: "updated_date",
+        first_name: "first_name",
+        last_name: "last_name",
+        birth_date: `NULL`, // Missing in source 3
+    },
+})}

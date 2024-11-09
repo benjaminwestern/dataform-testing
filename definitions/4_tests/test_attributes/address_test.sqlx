@@ -1,0 +1,130 @@
+config {
+  type: "test",
+  dataset: {name: "address", schema: "sources"}
+}
+
+SELECT 
+  '123 Main St' as address1,
+  'Suite 100' as address2,
+  'Building A' as address3,
+  'Richmond' as suburb,
+  'Melbourne' as city,
+  '3121' as postcode,
+  'VIC' as state,
+  'AUSTRALIA' as country,
+  'test_case_complete_valid' as test_case,
+  '123 Main St\nSuite 100\nBuilding A\nRichmond\nMelbourne VIC 3121\nAustralia' as full_address,
+  'Richmond 3121, Melbourne, VIC, Australia' as suburb_level,
+  'Melbourne, VIC, Australia' as city_level,
+  'VIC, Australia' as state_level,
+  'Australia' as country_level,
+  'VALID' as validation_status,
+  'ADDRESS_OUTPUT' as location_accuracy
+UNION ALL
+
+SELECT 
+  '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', '3121', 'VIC', NULL,
+  'test_case_default_country',
+  '123 Main St\nRichmond\nMelbourne VIC 3121\nAustralia',
+  'Richmond 3121, Melbourne, VIC, Australia',
+  'Melbourne, VIC, Australia',
+  'VIC, Australia',
+  'Australia',
+  'VALID',
+  'ADDRESS_OUTPUT'
+UNION ALL
+
+SELECT 
+  NULL, NULL, NULL, 'Richmond', 'Melbourne', '3121', 'VIC', 'AUSTRALIA',
+  'test_case_suburb_only',
+  'Richmond\nMelbourne VIC 3121\nAustralia',
+  'Richmond 3121, Melbourne, VIC, Australia',
+  'Melbourne, VIC, Australia',
+  'VIC, Australia',
+  'Australia',
+  'VALID',
+  'SUBURB_OUTPUT'
+UNION ALL
+
+SELECT 
+  NULL, NULL, NULL, NULL, 'Melbourne', NULL, 'VIC', 'AUSTRALIA',
+  'test_case_city_only',
+  'Melbourne VIC\nAustralia',
+  'Melbourne, VIC, Australia',
+  'Melbourne, VIC, Australia',
+  'VIC, Australia',
+  'Australia',
+  'MISSING',
+  'CITY_OUTPUT'
+UNION ALL
+
+SELECT 
+  NULL, NULL, NULL, NULL, NULL, NULL, 'VIC', 'AUSTRALIA',
+  'test_case_state_only',
+  'VIC\nAustralia',
+  'VIC, Australia',
+  'VIC, Australia',
+  'VIC, Australia',
+  'Australia',
+  'MISSING',
+  'STATE_OUTPUT'
+UNION ALL
+
+SELECT 
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'USA',
+  'test_case_country_only',
+  'Usa',
+  'Usa',
+  'Usa',
+  'Usa',
+  'Usa',
+  'MISSING',
+  'COUNTRY_OUTPUT'
+UNION ALL
+
+SELECT 
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  'test_case_all_null',
+  'Australia',
+  'Australia',
+  'Australia',
+  'Australia',
+  'Australia',
+  'MISSING',
+  NULL as location_accuracy
+UNION ALL
+
+SELECT 
+  '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', 'ABC', 'VIC', 'AUSTRALIA',
+  'test_case_invalid_postcode',
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  'INVALID_POSTCODE',
+  'ADDRESS_OUTPUT'
+UNION ALL
+
+SELECT 
+  '123 Main St', NULL, NULL, 'Richmond', 'Melbourne', '3121', 'INVALID', 'AUSTRALIA',
+  'test_case_invalid_state',
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  'INVALID_STATE',
+  'ADDRESS_OUTPUT'
+UNION ALL
+
+SELECT 
+  ' 123   Main   St ', NULL, NULL, ' Richmond ', ' Melbourne ', '3121', ' VIC ', ' AUSTRALIA ',
+  'test_case_extra_spaces',
+  '123 Main St\nRichmond\nMelbourne VIC 3121\nAustralia',
+  'Richmond 3121, Melbourne, VIC, Australia',
+  'Melbourne, VIC, Australia',
+  'VIC, Australia',
+  'Australia',
+  'VALID',
+  'ADDRESS_OUTPUT'

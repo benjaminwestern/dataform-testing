@@ -1,0 +1,30 @@
+config {
+    type: "view",
+    schema: "intermediate",
+    name: "source_5_prepared",
+    description: "Customer service platform with support history and interaction preferences",
+    dependencies: [
+        {dataset: "sources", name: "source_5"}
+    ]
+}
+
+js {
+    const tableRef = ref({schema: "sources", name: "source_5"});
+}
+
+${common.prepareSource({
+    table: tableRef,
+    name: common.generateTableName(tableRef),
+    priority: 5,
+    // Key is the output column name, value is the input column name
+    columnMapping: {
+        id: "support_id",
+        email: "email",
+        mobile: "mobile",
+        created_date: "created_date",
+        updated_date: "updated_date",
+        first_name: "first_name",
+        last_name: "last_name",
+        birth_date: `NULL`, // Missing in source 5
+    },
+})}

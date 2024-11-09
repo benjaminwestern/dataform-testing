@@ -1,0 +1,44 @@
+config {
+    type: "operations",
+    dataset: "extras",
+    name: "process_content",
+    description: "Process content from posts_questions and posts_answers to create a new table with the content of the posts and the user that created it",
+    hasOutput: true,
+    dependencies: [
+        {
+            dataset: "stackoverflow",
+            name: "posts_questions"
+        },
+        {
+            dataset: "stackoverflow",
+            name: "posts_answers"
+        }
+    ]
+}
+
+CREATE OR REPLACE TABLE ${self()} AS
+SELECT
+    id                        AS post_id,
+    creation_date             AS created_at,
+    'answer'                  AS type,
+    title,
+    body,
+    owner_user_id,
+    CAST(parent_id AS STRING) AS parent_id
+FROM
+    ${ref({schema: "stackoverflow", name: "posts_answers"})}
+WHERE
+    creation_date >= TIMESTAMP('2019-01-01')
+UNION ALL
+SELECT
+    id            AS post_id,
+    creation_date AS created_at,
+    'question'    AS type,
+    title,
+    body,
+    owner_user_id,
+    parent_id
+FROM
+    ${ref({schema: "stackoverflow", name: "posts_questions"})}
+WHERE
+    creation_date >= TIMESTAMP('2019-01-01')

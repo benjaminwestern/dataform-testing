@@ -1,0 +1,42 @@
+config {
+  type: "view",
+  schema: "sources",
+  name: "age",
+  description: "Tests various age standardization scenarios"
+}
+
+WITH AgeInputs AS (
+  SELECT CAST('1990-01-01' AS DATE) as input_date, NULL as input_age, 'test_case_valid_date' as test_case UNION ALL
+  SELECT CAST('1900-01-01' AS DATE), NULL, 'test_case_age_too_high' UNION ALL
+  SELECT CAST('2025-01-01' AS DATE), NULL, 'test_case_future_date' UNION ALL
+  SELECT NULL, '25', 'test_case_valid_age' UNION ALL
+  SELECT NULL, '0', 'test_case_valid_zero_age' UNION ALL
+  SELECT NULL, '-5', 'test_case_negative_age' UNION ALL
+  SELECT NULL, '150', 'test_case_age_too_high_direct' UNION ALL
+  SELECT NULL, 'abc', 'test_case_invalid_age_format' UNION ALL
+  SELECT NULL, NULL, 'test_case_missing_both' UNION ALL
+  SELECT CAST('2010-01-01' AS DATE), '12', 'test_case_date_preferred' UNION ALL
+  SELECT CAST('2007-06-15' AS DATE), NULL, 'test_case_under_18' UNION ALL
+  SELECT CAST('2000-06-15' AS DATE), NULL, 'test_case_18_24' UNION ALL
+  SELECT CAST('1990-06-15' AS DATE), NULL, 'test_case_25_34' UNION ALL
+  SELECT CAST('1980-06-15' AS DATE), NULL, 'test_case_35_44' UNION ALL
+  SELECT CAST('1970-06-15' AS DATE), NULL, 'test_case_45_54' UNION ALL
+  SELECT CAST('1960-06-15' AS DATE), NULL, 'test_case_55_64' UNION ALL
+  SELECT CAST('1950-06-15' AS DATE), NULL, 'test_case_65_plus'
+),
+ValidatedAges AS (
+  SELECT 
+    input_date,
+    input_age,
+    test_case,
+    ${attributes.standardiseAge('input_date', 'input_age', 'TEST')} AS age_validation
+  FROM AgeInputs
+)
+SELECT
+  input_date,
+  input_age,
+  test_case,
+  age_validation.value.exact_age as default_validation_exact_age,
+  age_validation.value.age_group as default_validation_age_group,
+  age_validation.validation_status as default_validation_status,
+FROM ValidatedAges

@@ -1,0 +1,21 @@
+config {
+    type: "view",
+    dataset: "sources",
+    name: "inline_js",
+    description: "This is a sample view with inline JS"
+}
+
+js {
+ const foo = 1;
+ function bar(number){
+     return number+1;
+ }
+}
+
+js { 
+    const foobar = 1; 
+}
+
+SELECT ${foobar} as one,
+       ${bar(foo)} as two,
+       'three' as three

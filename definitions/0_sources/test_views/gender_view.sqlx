@@ -1,0 +1,42 @@
+config {
+  type: "view",
+  schema: "sources",
+  name: "gender",
+  description: "Tests various gender validation scenarios"
+}
+
+WITH GenderInputs AS (
+  SELECT 'M' as input_string, 'test_case_male_short' as test_case UNION ALL
+  SELECT 'MALE', 'test_case_male_full' UNION ALL
+  SELECT 'Man', 'test_case_male_mixed_case' UNION ALL
+  SELECT 'BOY', 'test_case_male_alternate' UNION ALL
+  SELECT 'F', 'test_case_female_short' UNION ALL
+  SELECT 'FEMALE', 'test_case_female_full' UNION ALL
+  SELECT 'Woman', 'test_case_female_mixed_case' UNION ALL
+  SELECT 'GIRL', 'test_case_female_alternate' UNION ALL
+  SELECT 'N', 'test_case_nonbinary_short' UNION ALL
+  SELECT 'NON-BINARY', 'test_case_nonbinary_full' UNION ALL
+  SELECT 'X', 'test_case_nonbinary_alternate' UNION ALL
+  SELECT 'P', 'test_case_pnts_short' UNION ALL
+  SELECT 'PNTS', 'test_case_pnts_full' UNION ALL
+  SELECT 'NA', 'test_case_pnts_alternate' UNION ALL
+  SELECT NULL, 'test_case_null' UNION ALL
+  SELECT '', 'test_case_empty' UNION ALL
+  SELECT ' M ', 'test_case_with_spaces' UNION ALL
+  SELECT 'UNKNOWN', 'test_case_unrecognized' UNION ALL
+  SELECT '?', 'test_case_invalid_char' UNION ALL
+  SELECT 'male', 'test_case_lowercase'
+),
+ValidatedGenders AS (
+  SELECT 
+    input_string,
+    test_case,
+    ${attributes.standardiseGender('input_string')} AS gender_validation
+  FROM GenderInputs
+)
+SELECT
+  input_string,
+  test_case,
+  gender_validation.value as default_validation,
+  gender_validation.validation_status as default_validation_status
+FROM ValidatedGenders

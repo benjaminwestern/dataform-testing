@@ -1,0 +1,29 @@
+config {
+    type: "operations",
+    dataset: "sources",
+    name: "load_sample",
+    hasOutput: true,
+    disabled: true
+}
+
+CREATE OR REPLACE TABLE ${self()} (
+  BugID STRING OPTIONS (description = 'Reference number of the bug - Example: "BUG-001"'),
+  Severity STRING OPTIONS (description = 'Severity level of the bug - Example: Low, Medium, High'),
+  Component STRING OPTIONS (description = 'Component of the system where the bug was found - Example: Frontend'),
+  Description STRING OPTIONS (description = 'Description of the bug - Example: "The button is not working"')
+);
+LOAD DATA OVERWRITE ${self()}
+(
+    BugID STRING,
+    Severity STRING,
+    Component STRING,
+    Description STRING
+)
+FROM FILES (
+  format = "NEWLINE_DELIMITED_JSON",
+  max_bad_records = 0,
+  ignore_unknown_values = true,
+  uris = [
+    "gs://${ dataform.projectConfig.vars.INPUT_BUCKET_2 }/sample_data.ndjson"
+  ]
+)

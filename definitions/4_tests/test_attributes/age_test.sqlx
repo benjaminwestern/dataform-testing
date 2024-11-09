@@ -1,0 +1,156 @@
+config {
+  type: "test",
+  dataset: {name: "age", schema: "sources"}
+}
+
+SELECT 
+  CAST('1990-01-01' AS DATE) as input_date,
+  NULL as input_age,
+  'test_case_valid_date' as test_case,
+  34 as default_validation_exact_age,
+  '25-34' as default_validation_age_group,
+  'VALID' as default_validation_status
+UNION ALL
+
+SELECT 
+  CAST('1900-01-01' AS DATE),
+  NULL,
+  'test_case_age_too_high',
+  NULL,
+  NULL,
+  'AGE_TOO_HIGH'
+UNION ALL
+
+SELECT 
+  CAST('2025-01-01' AS DATE),
+  NULL,
+  'test_case_future_date',
+  NULL,
+  NULL,
+  'FUTURE_DATE'
+UNION ALL
+
+SELECT 
+  NULL,
+  '25',
+  'test_case_valid_age',
+  25,
+  '25-34',
+  'VALID'
+UNION ALL
+
+SELECT 
+  NULL,
+  '0',
+  'test_case_valid_zero_age',
+  0,
+  'Under 18',
+  'VALID'
+UNION ALL
+
+SELECT 
+  NULL,
+  '-5',
+  'test_case_negative_age',
+  NULL,
+  NULL,
+  'NEGATIVE_AGE'
+UNION ALL
+
+SELECT 
+  NULL,
+  '150',
+  'test_case_age_too_high_direct',
+  NULL,
+  NULL,
+  'AGE_TOO_HIGH'
+UNION ALL
+
+SELECT 
+  NULL,
+  'abc',
+  'test_case_invalid_age_format',
+  NULL,
+  NULL,
+  'INVALID_AGE_FORMAT'
+UNION ALL
+
+SELECT 
+  NULL,
+  NULL,
+  'test_case_missing_both',
+  NULL,
+  NULL,
+  'MISSING'
+UNION ALL
+
+SELECT 
+  CAST('2010-01-01' AS DATE),
+  '12',
+  'test_case_date_preferred',
+  14,
+  'Under 18',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('2007-06-15' AS DATE),
+  NULL,
+  'test_case_under_18',
+  17,
+  'Under 18',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('2000-06-15' AS DATE),
+  NULL,
+  'test_case_18_24',
+  24,
+  '18-24',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('1990-06-15' AS DATE),
+  NULL,
+  'test_case_25_34',
+  34,
+  '25-34',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('1980-06-15' AS DATE),
+  NULL,
+  'test_case_35_44',
+  44,
+  '35-44',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('1970-06-15' AS DATE),
+  NULL,
+  'test_case_45_54',
+  54,
+  '45-54',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('1960-06-15' AS DATE),
+  NULL,
+  'test_case_55_64',
+  64,
+  '55-64',
+  'VALID'
+UNION ALL
+
+SELECT 
+  CAST('1950-06-15' AS DATE),
+  NULL,
+  'test_case_65_plus',
+  74,
+  '65+',
+  'VALID'

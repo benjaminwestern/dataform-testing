@@ -1,0 +1,54 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "mobile",
+    description: "Tests various mobile validation scenarios"
+}
+
+WITH MobileInputs AS (
+SELECT 'abc0412345678' as input_mobile, 'test_case_letters' as test_case 
+UNION ALL
+SELECT NULL, 'test_case_null' 
+UNION ALL
+SELECT '', 'test_case_empty' 
+UNION ALL
+SELECT '0412345678', 'test_case_valid_basic' 
+UNION ALL
+SELECT '+61412345678', 'test_case_valid_intl' 
+UNION ALL
+SELECT '61412345678', 'test_case_valid_61' 
+UNION ALL
+SELECT '041234567', 'test_case_short' 
+UNION ALL
+SELECT '04123456789', 'test_case_long' 
+UNION ALL
+SELECT '+6141234567', 'test_case_invalid_intl' 
+UNION ALL
+SELECT '0312345678', 'test_case_wrong_prefix_03' 
+UNION ALL
+SELECT '+62412345678', 'test_case_wrong_prefix_62' 
+UNION ALL
+SELECT '041234567A', 'test_case_letters_mixed' 
+UNION ALL
+SELECT ' 0412345678', 'test_case_leading_space' 
+UNION ALL
+SELECT '412345678', 'test_case_no_prefix' 
+UNION ALL
+SELECT '+61 412 345 678', 'test_case_intl_spaces' 
+UNION ALL
+SELECT '+61-412-345-678', 'test_case_intl_hyphens' 
+UNION ALL
+SELECT '0412-345-678', 'test_case_local_hyphens' 
+UNION ALL
+SELECT '0412345-678', 'test_case_partial_hyphen'
+),
+ValidatedMobiles AS (
+  SELECT input_mobile, test_case, ${attributes.validateMobile('input_mobile')} AS mobile_validation
+  FROM MobileInputs
+)
+SELECT
+    input_mobile,
+    test_case,
+    mobile_validation.value as default_validation,
+    mobile_validation.validation_status as default_validation_status
+FROM ValidatedMobiles

@@ -1,0 +1,43 @@
+actions:
+  - view:
+      filename: 0_sources/raw_sql/example.sql
+      name: example_view
+      dataset: sources
+      description: This is a test view
+      columns:
+        - path:
+            - one
+          description: this column is a simple generated column
+          # bigqueryPolicyTags:
+          #   - tag1
+          #   - tag2
+          tags:
+            - tag3
+            - tag4
+        - path:
+            - two
+          description: this column is a simple generated column
+          # bigqueryPolicyTags:
+          #   - taga
+          #   - tagb
+          tags:
+            - tagc
+            - tagd
+      dependencyTargets:
+        - name: inline_js
+  - table:
+      filename: 0_sources/raw_sql/example.sql
+      name: example_table
+      dataset: sources
+      description: This is a test table
+      dependencyTargets:
+        - name: inline_js
+  - notebook:
+      name: example_notebook
+      location: US
+      project: benjaminwestern-test-dataform
+      dependencyTargets:
+        - name: inline_js
+      filename: 0_sources/notebook/sample.ipynb
+      disabled: false
+      description: This is a test notebook

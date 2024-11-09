@@ -1,0 +1,259 @@
+config {
+    type: "view",
+    schema: "sources",
+    name: "source_4",
+    description: "Transaction platform data with shipping addresses and purchase history"
+}
+
+WITH source_4_data AS (
+    -- Regular customer with multiple addresses
+    SELECT 
+        'T001' as transaction_id,
+        'john.smith@email.com' as email,
+        '0400123456' as mobile,
+        'John' as first_name,
+        'Smith' as last_name,
+        'Home' as address_type,
+        '123 Main Street' as address_line_1,
+        'Apartment 4B' as address_line_2,
+        'Sydney' as city,
+        'NSW' as state,
+        '2000' as postcode,
+        'AU' as country,
+        1500.50 as total_spend,
+        15 as order_count,
+        'Premium' as customer_tier,
+        DATE '2024-02-15' as last_purchase_date,
+        TIMESTAMP '2023-01-15' as created_date,
+        TIMESTAMP '2024-02-15' as updated_date
+    UNION ALL
+    SELECT 
+        'T002',
+        'john.smith@email.com',
+        '0400123456',
+        'John',
+        'Smith',
+        'Work',
+        '456 Business Ave',
+        'Level 12',
+        'Sydney',
+        'NSW',
+        '2000',
+        'AU',
+        1500.50,
+        15,
+        'Premium',
+        DATE '2024-02-15',
+        TIMESTAMP '2023-03-20',
+        TIMESTAMP '2024-02-15'
+    UNION ALL
+    -- Customer with single address
+    SELECT 
+        'T003',
+        'sarah.jones@email.com',
+        '0400999888',
+        'Sarah',
+        'Jones',
+        'Home',
+        '789 Park Road',
+        NULL,
+        'Melbourne',
+        'VIC',
+        '3000',
+        'AU',
+        750.25,
+        8,
+        'Standard',
+        DATE '2024-01-20',
+        TIMESTAMP '2023-06-01',
+        TIMESTAMP '2024-01-20'
+    UNION ALL
+    -- International customer
+    SELECT 
+        'T004',
+        'mike.brown@email.com',
+        '0400777666',
+        'Michael',
+        'Brown',
+        'Home',
+        '321 Queen Street',
+        NULL,
+        'Auckland',
+        'AKL',
+        '1010',
+        'NZ',
+        2000.75,
+        20,
+        'Premium',
+        DATE '2024-03-01',
+        TIMESTAMP '2023-04-15',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- Recent high-value customer
+    SELECT 
+        'T005',
+        'emma.wilson@email.com',
+        '0400123459',
+        'Emma',
+        'Wilson',
+        'Home',
+        '567 Beach Road',
+        'Unit 10',
+        'Gold Coast',
+        'QLD',
+        '4217',
+        'AU',
+        3000.00,
+        25,
+        'Premium',
+        DATE '2024-03-10',
+        TIMESTAMP '2023-07-01',
+        TIMESTAMP '2024-03-10'
+    UNION ALL
+    -- Business customer
+    SELECT 
+        'T006',
+        'd.lee@email.com',
+        '0400123460',
+        'David',
+        'Lee',
+        'Business',
+        '888 Corporate Drive',
+        'Suite 15',
+        'Perth',
+        'WA',
+        '6000',
+        'AU',
+        5000.00,
+        30,
+        'Premium',
+        DATE '2024-02-28',
+        TIMESTAMP '2023-05-15',
+        TIMESTAMP '2024-02-28'
+    UNION ALL
+    -- New customer
+    SELECT 
+        'T007',
+        'peter.brown@email.com',
+        '0400123461',
+        'Peter',
+        'Brown',
+        'Home',
+        '246 Hill Street',
+        NULL,
+        'Brisbane',
+        'QLD',
+        '4000',
+        'AU',
+        200.00,
+        2,
+        'Standard',
+        DATE '2024-03-05',
+        TIMESTAMP '2024-02-01',
+        TIMESTAMP '2024-03-05'
+    UNION ALL
+    -- Inactive customer with old address
+    SELECT 
+        'T008',
+        'jane.doe@email.com',
+        '0400444333',
+        'Jane',
+        'Doe',
+        'Home',
+        '135 Old Road',
+        NULL,
+        'Adelaide',
+        'SA',
+        '5000',
+        'AU',
+        100.00,
+        1,
+        'Standard',
+        DATE '2023-06-15',
+        TIMESTAMP '2023-06-15',
+        TIMESTAMP '2023-06-15'
+    UNION ALL
+    -- Multiple addresses for business
+    SELECT 
+        'T009',
+        'robert.smith@email.com',
+        '0400123463',
+        'Robert',
+        'Smith',
+        'Warehouse',
+        '999 Industrial Park',
+        'Building C',
+        'Melbourne',
+        'VIC',
+        '3000',
+        'AU',
+        10000.00,
+        50,
+        'Premium',
+        DATE '2024-03-01',
+        TIMESTAMP '2023-08-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    SELECT 
+        'T010',
+        'robert.smith@email.com',
+        '0400123463',
+        'Robert',
+        'Smith',
+        'Office',
+        '777 Collins Street',
+        'Level 20',
+        'Melbourne',
+        'VIC',
+        '3000',
+        'AU',
+        10000.00,
+        50,
+        'Premium',
+        DATE '2024-03-01',
+        TIMESTAMP '2023-08-01',
+        TIMESTAMP '2024-03-01'
+    UNION ALL
+    -- International shipping address
+    SELECT 
+        'T011',
+        'lisa.wang@email.com',
+        '0400123464',
+        'Lisa',
+        'Wang',
+        'Home',
+        '444 Central Avenue',
+        'Apartment 8C',
+        'Singapore',
+        NULL,
+        '018956',
+        'SG',
+        1500.00,
+        12,
+        'Premium',
+        DATE '2024-02-20',
+        TIMESTAMP '2023-09-01',
+        TIMESTAMP '2024-02-20'
+    UNION ALL
+    -- Recently updated address
+    SELECT 
+        'T012',
+        'james.wilson@email.com',
+        '0400123465',
+        'James',
+        'Wilson',
+        'Home',
+        '333 New Street',
+        'Unit 5',
+        'Canberra',
+        'ACT',
+        '2600',
+        'AU',
+        800.00,
+        7,
+        'Standard',
+        DATE '2024-03-08',
+        TIMESTAMP '2023-10-15',
+        TIMESTAMP '2024-03-08'
+)
+SELECT * FROM source_4_data

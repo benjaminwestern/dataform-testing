@@ -1,0 +1,21 @@
+config {
+    type: "view",
+    dataset: "outputs",
+    name: "bug_count",
+    dependencies: [
+        {
+            dataset: "intermediate",
+            name: "parsed_sample"
+        },
+        {
+            name: "more_than_one_bug",
+        }
+    ]
+}
+
+SELECT
+    count(*) as bug_count,
+    severity
+FROM 
+    ${ref({schema: "intermediate", name: "parsed_sample"})}
+GROUP BY severity
